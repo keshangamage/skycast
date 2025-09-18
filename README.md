@@ -119,4 +119,3 @@ Deploy to any static host (Netlify, Vercel, GitHub Pages, etc.):
 
 - Weather data by OpenWeather (https://openweathermap.org/)
 - Built with React, Vite, and Tailwind CSS
-
