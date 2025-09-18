@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { SearchBar } from "./components/SearchBar.jsx";
 import { WeatherCard } from "./components/WeatherCard.jsx";
 import { fetchWeatherByCity } from "./lib/openWeather.js";
-import logoUrl from "./assets/skycast logo.png";
+import logoUrl from "./assets/logo.png";
 import "./App.css";
 
 function App() {
@@ -93,7 +93,7 @@ function App() {
               <img
                 src={logoUrl}
                 alt="SkyCast logo"
-                className="h-16 w-16 rounded-2xl shadow-2xl ring-4 ring-white/30 backdrop-blur-sm"
+                className="h-15 w-15 rounded-2xl shadow-2xl ring-4 ring-white/30 backdrop-blur-sm"
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 to-transparent"></div>
             </div>
