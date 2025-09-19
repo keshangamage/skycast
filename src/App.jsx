@@ -1,18 +1,35 @@
 import { useEffect, useState } from "react";
 import { SearchBar } from "./components/SearchBar.jsx";
 import { WeatherCard } from "./components/WeatherCard.jsx";
-import { fetchWeatherByCity } from "./lib/openWeather.js";
+import { ForecastCard } from "./components/ForecastCard.jsx";
+import { LocationButton } from "./components/LocationButton.jsx";
+import { FavoritesManager } from "./components/FavoritesManager.jsx";
+import { UnitToggle } from "./components/UnitToggle.jsx";
+import { AlertsBanner } from "./components/AlertsBanner.jsx";
+import {
+  fetchWeatherByCity,
+  fetchForecastByCity,
+  fetchWeatherByCoords,
+} from "./lib/openWeather.js";
 import logoUrl from "./assets/logo.png";
 import "./App.css";
 
 function App() {
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState(null);
+  const [forecast, setForecast] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [units, setUnits] = useState("metric");
 
   const apiKey = (import.meta.env.VITE_OPENWEATHER_API_KEY || "").trim();
   const defaultCity = import.meta.env.VITE_DEFAULT_CITY || "London";
+
+  // Initialize favorites manager
+  const favoritesManager = FavoritesManager({
+    onCitySelect: handleSearch,
+    loading,
+  });
 
   const getWeatherBackground = () => {
     if (!weather?.weather?.[0]) return "from-blue-400 via-blue-500 to-blue-600";
@@ -46,11 +63,10 @@ function App() {
       : "from-blue-400 via-blue-500 to-cyan-500";
   };
 
-  // Fetch default city on mount to demonstrate the UI
   useEffect(() => {
     if (!apiKey) return;
     handleSearch(defaultCity);
-  }, [apiKey]);
+  }, [apiKey, defaultCity]);
 
   async function handleSearch(city) {
     const term = city?.trim() || query.trim();
@@ -61,17 +77,97 @@ function App() {
       );
       return;
     }
+
     try {
       setLoading(true);
       setError("");
       setWeather(null);
-      const data = await fetchWeatherByCity(term, apiKey, "metric");
-      setWeather(data);
+      setForecast(null);
+
+      // Fetch both current weather and forecast in parallel
+      const [weatherData, forecastData] = await Promise.all([
+        fetchWeatherByCity(term, apiKey, units),
+        fetchForecastByCity(term, apiKey, units),
+      ]);
+
+      setWeather(weatherData);
+      setForecast(forecastData);
     } catch (err) {
       setWeather(null);
+      setForecast(null);
       setError(err.message || "Failed to fetch weather");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleLocationFound(lat, lon) {
+    if (!apiKey) {
+      setError(
+        "Missing API key. Set VITE_OPENWEATHER_API_KEY in .env and restart the dev server."
+      );
+      return;
+    }
+    try {
+      setLoading(true);
+      setError("");
+      setWeather(null);
+      setForecast(null);
+
+      // Fetch weather by coordinates
+      const weatherData = await fetchWeatherByCoords(lat, lon, apiKey, units);
+
+      let forecastData = null;
+      if (weatherData?.name) {
+        try {
+          forecastData = await fetchForecastByCity(
+            weatherData.name,
+            apiKey,
+            units
+          );
+        } catch (forecastErr) {
+          console.warn(
+            "Could not fetch forecast for location:",
+            forecastErr.message
+          );
+        }
+      }
+
+      setWeather(weatherData);
+      setForecast(forecastData);
+
+      // Update the search query with the found city name
+      if (weatherData?.name) {
+        setQuery(weatherData.name);
+      }
+    } catch (err) {
+      setWeather(null);
+      setForecast(null);
+      setError(err.message || "Failed to fetch weather for your location");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleUnitChange(newUnits) {
+    setUnits(newUnits);
+
+    // If we have current weather data, refetch with new units
+    if (weather?.name) {
+      try {
+        setLoading(true);
+        const [weatherData, forecastData] = await Promise.all([
+          fetchWeatherByCity(weather.name, apiKey, newUnits),
+          fetchForecastByCity(weather.name, apiKey, newUnits),
+        ]);
+
+        setWeather(weatherData);
+        setForecast(forecastData);
+      } catch (err) {
+        setError(err.message || "Failed to refresh weather data");
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
@@ -106,13 +202,31 @@ function App() {
           </p>
         </header>
 
-        <SearchBar
-          value={query}
-          onChange={setQuery}
-          onSearch={() => handleSearch()}
-          loading={loading}
-          placeholder="Search any city worldwide..."
-        />
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex gap-3">
+            <LocationButton
+              onLocationFound={handleLocationFound}
+              loading={loading}
+            />
+            <UnitToggle
+              unit={units}
+              onUnitChange={handleUnitChange}
+              loading={loading}
+            />
+            <favoritesManager.FavoritesButton />
+          </div>
+          <div className="w-full">
+            <SearchBar
+              value={query}
+              onChange={setQuery}
+              onSearch={() => handleSearch()}
+              loading={loading}
+              placeholder="Search any city worldwide..."
+            />
+          </div>
+        </div>
+
+        <favoritesManager.FavoritesList />
 
         {error && (
           <div className="mt-6 rounded-2xl border border-red-300/30 bg-red-500/10 backdrop-blur-sm p-6 text-white shadow-xl">
@@ -125,7 +239,13 @@ function App() {
 
         {weather && (
           <div className="mt-8 transform transition-all duration-500 animate-fadeIn">
-            <WeatherCard weather={weather} />
+            <AlertsBanner weather={weather} />
+            <WeatherCard
+              weather={weather}
+              AddToFavoritesButton={favoritesManager.AddToFavoritesButton}
+              units={units}
+            />
+            {forecast && <ForecastCard forecast={forecast} units={units} />}
           </div>
         )}
 
