@@ -65,11 +65,11 @@ function App() {
 
   useEffect(() => {
     if (!apiKey) return;
-    
+
     // Initial load with default city
     const loadDefaultWeather = async () => {
       if (!defaultCity) return;
-      
+
       try {
         setLoading(true);
         setError("");
@@ -92,7 +92,7 @@ function App() {
         setLoading(false);
       }
     };
-    
+
     loadDefaultWeather();
   }, [apiKey, defaultCity, units]);
 
@@ -260,7 +260,9 @@ function App() {
           <div className="mt-4 sm:mt-6 mx-3 sm:mx-0 rounded-xl sm:rounded-2xl border border-red-300/30 bg-red-500/10 backdrop-blur-sm p-4 sm:p-6 text-white shadow-xl">
             <div className="flex items-start sm:items-center gap-3">
               <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-400 flex-shrink-0 mt-0.5 sm:mt-0"></div>
-              <p className="font-medium text-sm sm:text-base leading-relaxed">{error}</p>
+              <p className="font-medium text-sm sm:text-base leading-relaxed">
+                {error}
+              </p>
             </div>
           </div>
         )}

@@ -124,7 +124,9 @@ export function AlertsBanner({ weather }) {
           >
             <div className="px-4 sm:px-6 py-3 sm:py-4">
               <div className="flex items-start sm:items-center gap-3 sm:gap-4">
-                <div className="text-xl sm:text-2xl flex-shrink-0">{alert.icon}</div>
+                <div className="text-xl sm:text-2xl flex-shrink-0">
+                  {alert.icon}
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <AlertIcon type={alert.type} />

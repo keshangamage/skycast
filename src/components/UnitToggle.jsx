@@ -23,7 +23,9 @@ export function UnitToggle({ unit, onUnitChange, loading = false }) {
             d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a5 5 0 0010 0v-6a3 3 0 00-3-3H9a3 3 0 00-3 3v2.5z"
           />
         </svg>
-        <span className="font-semibold text-sm sm:text-base">{isCelsius ? "°C" : "°F"}</span>
+        <span className="font-semibold text-sm sm:text-base">
+          {isCelsius ? "°C" : "°F"}
+        </span>
         <span className="hidden lg:inline text-sm opacity-80">
           {isCelsius ? "Celsius" : "Fahrenheit"}
         </span>
