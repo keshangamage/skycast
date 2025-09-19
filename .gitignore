@@ -66,3 +66,11 @@ Icon?
 *.bak
 *.backup
 *~
+
+# Vite build outputs
+/dist
+/docs
+
+# Mac OS cache
+.AppleDouble
+.LSOverride
