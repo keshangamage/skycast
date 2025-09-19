@@ -23,7 +23,7 @@ function App() {
   const [units, setUnits] = useState("metric");
 
   const apiKey = (import.meta.env.VITE_OPENWEATHER_API_KEY || "").trim();
-  const defaultCity = import.meta.env.VITE_DEFAULT_CITY || "London";
+  const defaultCity = import.meta.env.VITE_DEFAULT_CITY || "Colombo, Sri Lanka";
 
   // Initialize favorites manager
   const favoritesManager = FavoritesManager({
