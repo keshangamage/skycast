@@ -107,12 +107,12 @@ export function AlertsBanner({ weather }) {
   if (alerts.length === 0) return null;
 
   return (
-    <div className="mt-6 mb-5 space-y-3">
+    <div className="mt-4 sm:mt-6 mb-4 sm:mb-5 space-y-2 sm:space-y-3">
       {alerts.map((alert, index) => (
         <div key={index} className="relative group animate-fadeIn">
-          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-2xl blur-sm"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-xl sm:rounded-2xl blur-sm"></div>
           <div
-            className={`relative overflow-hidden rounded-2xl border backdrop-blur-lg shadow-xl ${
+            className={`relative overflow-hidden rounded-xl sm:rounded-2xl border backdrop-blur-lg shadow-xl ${
               alert.type === "danger"
                 ? "border-red-400/40 bg-red-500/20"
                 : alert.type === "warning"
@@ -122,22 +122,22 @@ export function AlertsBanner({ weather }) {
                 : "border-blue-400/40 bg-blue-500/20"
             }`}
           >
-            <div className="px-6 py-4">
-              <div className="flex items-center gap-4">
-                <div className="text-2xl">{alert.icon}</div>
-                <div className="flex-1">
+            <div className="px-4 sm:px-6 py-3 sm:py-4">
+              <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                <div className="text-xl sm:text-2xl flex-shrink-0">{alert.icon}</div>
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <AlertIcon type={alert.type} />
-                    <h4 className="font-semibold text-white text-lg">
+                    <h4 className="font-semibold text-white text-sm sm:text-base lg:text-lg">
                       {alert.title}
                     </h4>
                   </div>
-                  <p className="text-white/90 text-sm leading-relaxed">
+                  <p className="text-white/90 text-xs sm:text-sm leading-relaxed">
                     {alert.message}
                   </p>
                 </div>
                 <div
-                  className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                  className={`px-2 py-1 rounded-lg text-xs font-medium flex-shrink-0 ${
                     alert.type === "danger"
                       ? "bg-red-500/30 text-red-200"
                       : alert.type === "warning"

@@ -65,8 +65,36 @@ function App() {
 
   useEffect(() => {
     if (!apiKey) return;
-    handleSearch(defaultCity);
-  }, [apiKey, defaultCity]);
+    
+    // Initial load with default city
+    const loadDefaultWeather = async () => {
+      if (!defaultCity) return;
+      
+      try {
+        setLoading(true);
+        setError("");
+        setWeather(null);
+        setForecast(null);
+
+        // Fetch both current weather and forecast in parallel
+        const [weatherData, forecastData] = await Promise.all([
+          fetchWeatherByCity(defaultCity, apiKey, units),
+          fetchForecastByCity(defaultCity, apiKey, units),
+        ]);
+
+        setWeather(weatherData);
+        setForecast(forecastData);
+      } catch (err) {
+        setWeather(null);
+        setForecast(null);
+        setError(err.message || "Failed to fetch weather");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadDefaultWeather();
+  }, [apiKey, defaultCity, units]);
 
   async function handleSearch(city) {
     const term = city?.trim() || query.trim();
@@ -182,28 +210,28 @@ function App() {
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 sm:py-12">
-        <header className="mb-12 text-center">
-          <div className="mx-auto mb-6 flex items-center justify-center gap-4">
-            <div className="relative">
+      <div className="relative z-10 mx-auto max-w-6xl px-3 sm:px-4 lg:px-6 py-6 sm:py-8 lg:py-12">
+        <header className="mb-8 sm:mb-12 text-center">
+          <div className="mx-auto mb-4 sm:mb-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <div className="relative flex-shrink-0">
               <img
                 src={logoUrl}
                 alt="SkyCast logo"
-                className="h-15 w-15 rounded-2xl shadow-2xl ring-4 ring-white/30 backdrop-blur-sm"
+                className="h-12 w-12 sm:h-15 sm:w-15 rounded-xl sm:rounded-2xl shadow-2xl ring-2 sm:ring-4 ring-white/30 backdrop-blur-sm"
               />
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/20 to-transparent"></div>
+              <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-white/20 to-transparent"></div>
             </div>
-            <h1 className="text-5xl font-black tracking-tight text-white drop-shadow-lg sm:text-6xl bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-lg bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
               SkyCast
             </h1>
           </div>
-          <p className="text-xl text-white/90 font-medium drop-shadow-md">
+          <p className="text-base sm:text-lg lg:text-xl text-white/90 font-medium drop-shadow-md px-4">
             Beautiful weather, beautifully presented ✨
           </p>
         </header>
 
-        <div className="flex flex-col items-center gap-4">
-          <div className="flex gap-3">
+        <div className="flex flex-col items-center gap-4 sm:gap-5">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 w-full max-w-md sm:max-w-none">
             <LocationButton
               onLocationFound={handleLocationFound}
               loading={loading}
@@ -215,7 +243,7 @@ function App() {
             />
             <favoritesManager.FavoritesButton />
           </div>
-          <div className="w-full">
+          <div className="w-full max-w-2xl">
             <SearchBar
               value={query}
               onChange={setQuery}
@@ -229,16 +257,16 @@ function App() {
         <favoritesManager.FavoritesList />
 
         {error && (
-          <div className="mt-6 rounded-2xl border border-red-300/30 bg-red-500/10 backdrop-blur-sm p-6 text-white shadow-xl">
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-red-400 flex-shrink-0"></div>
-              <p className="font-medium">{error}</p>
+          <div className="mt-4 sm:mt-6 mx-3 sm:mx-0 rounded-xl sm:rounded-2xl border border-red-300/30 bg-red-500/10 backdrop-blur-sm p-4 sm:p-6 text-white shadow-xl">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-400 flex-shrink-0 mt-0.5 sm:mt-0"></div>
+              <p className="font-medium text-sm sm:text-base leading-relaxed">{error}</p>
             </div>
           </div>
         )}
 
         {weather && (
-          <div className="mt-8 transform transition-all duration-500 animate-fadeIn">
+          <div className="mt-6 sm:mt-8 mx-3 sm:mx-0 transform transition-all duration-500 animate-fadeIn">
             <AlertsBanner weather={weather} />
             <WeatherCard
               weather={weather}
@@ -250,10 +278,10 @@ function App() {
         )}
 
         {!weather && !error && !loading && (
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm mb-4">
+          <div className="mt-8 sm:mt-12 text-center px-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-sm mb-4">
               <svg
-                className="w-8 h-8 text-white"
+                className="w-6 h-6 sm:w-8 sm:h-8 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -266,10 +294,10 @@ function App() {
                 />
               </svg>
             </div>
-            <p className="text-xl text-white/80 font-medium mb-2">
+            <p className="text-lg sm:text-xl text-white/80 font-medium mb-2">
               Discover weather anywhere 🌍
             </p>
-            <p className="text-white/60">
+            <p className="text-sm sm:text-base text-white/60 max-w-md mx-auto">
               Search for any city to see beautiful, real-time weather data
             </p>
           </div>

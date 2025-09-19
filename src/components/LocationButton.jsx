@@ -43,7 +43,7 @@ export function LocationButton({ onLocationFound, loading = false }) {
     <button
       onClick={handleGetLocation}
       disabled={loading}
-      className="relative inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-500/30 to-purple-500/30 backdrop-blur-lg px-4 py-3 text-white shadow-2xl border border-white/30 transition-all duration-300 hover:from-blue-500/40 hover:to-purple-500/40 hover:border-white/40 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 group overflow-hidden"
+      className="relative inline-flex items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-r from-blue-500/30 to-purple-500/30 backdrop-blur-lg px-3 sm:px-4 py-2.5 sm:py-3 text-white shadow-2xl border border-white/30 transition-all duration-300 hover:from-blue-500/40 hover:to-purple-500/40 hover:border-white/40 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 group overflow-hidden min-w-[120px] sm:min-w-[140px]"
       title="Get weather for your current location"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
@@ -51,7 +51,7 @@ export function LocationButton({ onLocationFound, loading = false }) {
         {loading ? (
           <>
             <svg
-              className="animate-spin w-5 h-5"
+              className="animate-spin w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               viewBox="0 0 24 24"
             >
@@ -69,12 +69,12 @@ export function LocationButton({ onLocationFound, loading = false }) {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            <span className="hidden sm:inline">Finding...</span>
+            <span className="text-sm sm:text-base">Finding...</span>
           </>
         ) : (
           <>
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -92,7 +92,7 @@ export function LocationButton({ onLocationFound, loading = false }) {
                 d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="hidden sm:inline">My Location</span>
+            <span className="text-sm sm:text-base">My Location</span>
           </>
         )}
       </span>

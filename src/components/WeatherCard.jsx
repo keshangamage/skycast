@@ -72,46 +72,48 @@ export function WeatherCard({
 
   return (
     <div className="relative group">
-      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-3xl blur-xl transform group-hover:scale-105 transition-transform duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/10 rounded-2xl sm:rounded-3xl blur-xl transform group-hover:scale-105 transition-transform duration-500"></div>
 
-      <div className="relative overflow-hidden rounded-3xl border border-white/30 bg-white/20 backdrop-blur-lg shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/30 bg-white/20 backdrop-blur-lg shadow-2xl">
         {/* Main weather display */}
-        <div className="relative px-8 py-8">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
-              <div className="relative">
+        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full lg:w-auto">
+              <div className="relative self-center sm:self-auto">
                 {icon && (
                   <>
                     <img
                       src={icon}
                       alt={primary?.description || "Weather icon"}
-                      className="h-20 w-20 drop-shadow-lg"
+                      className="h-16 w-16 sm:h-20 sm:w-20 drop-shadow-lg"
                     />
-                    <div className="absolute -top-2 -right-2 text-3xl">
+                    <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 text-2xl sm:text-3xl">
                       {weatherEmoji}
                     </div>
                   </>
                 )}
               </div>
 
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-3xl lg:text-4xl font-bold text-white drop-shadow-md">
+              <div className="flex flex-col gap-2 text-center sm:text-left w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3">
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white drop-shadow-md">
                     {name}
                     {country && (
-                      <span className="ml-2 text-xl lg:text-2xl font-normal text-white/80">
+                      <span className="ml-2 text-lg sm:text-xl lg:text-2xl font-normal text-white/80">
                         {country}
                       </span>
                     )}
                   </h2>
                   {AddToFavoritesButton && (
-                    <AddToFavoritesButton cityName={name} country={country} />
+                    <div className="flex-shrink-0">
+                      <AddToFavoritesButton cityName={name} country={country} />
+                    </div>
                   )}
                 </div>
-                <p className="text-xl lg:text-2xl text-white/90 capitalize font-medium drop-shadow-sm">
+                <p className="text-lg sm:text-xl lg:text-2xl text-white/90 capitalize font-medium drop-shadow-sm">
                   {primary?.description || "Clear sky"}
                 </p>
-                <div className="flex items-center gap-2 text-white/70">
+                <div className="flex items-center justify-center sm:justify-start gap-2 text-white/70">
                   <svg
                     className="w-4 h-4"
                     fill="none"
@@ -132,11 +134,11 @@ export function WeatherCard({
               </div>
             </div>
 
-            <div className="text-right">
-              <div className="text-6xl lg:text-7xl font-black text-white drop-shadow-lg mb-2">
+            <div className="text-center lg:text-right w-full lg:w-auto">
+              <div className="text-5xl sm:text-6xl lg:text-7xl font-black text-white drop-shadow-lg mb-2">
                 {formatTemp(temp, units)}
               </div>
-              <div className="text-white/80 text-lg">
+              <div className="text-white/80 text-base sm:text-lg">
                 Feels like {formatTemp(feels_like, units)}
               </div>
               {temp_min != null && temp_max != null && (
@@ -149,12 +151,12 @@ export function WeatherCard({
         </div>
 
         {/* Weather details grid */}
-        <div className="border-t border-white/20 bg-white/10 px-8 py-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="border-t border-white/20 bg-white/10 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <WeatherStat
               icon={
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -173,7 +175,7 @@ export function WeatherCard({
             <WeatherStat
               icon={
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -196,7 +198,7 @@ export function WeatherCard({
             <WeatherStat
               icon={
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -215,7 +217,7 @@ export function WeatherCard({
             <WeatherStat
               icon={
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -245,10 +247,10 @@ export function WeatherCard({
 
           {/* Enhanced details section */}
           {(sunrise || sunset || lat != null) && (
-            <div className="border-t border-white/20 pt-6">
-              <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
+            <div className="border-t border-white/20 pt-4 sm:pt-6">
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-sm sm:text-base">
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -262,12 +264,12 @@ export function WeatherCard({
                 </svg>
                 Additional Details
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {sunrise && (
                   <WeatherStat
                     icon={
                       <svg
-                        className="w-5 h-5 text-orange-300"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-orange-300"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -288,7 +290,7 @@ export function WeatherCard({
                   <WeatherStat
                     icon={
                       <svg
-                        className="w-5 h-5 text-orange-400"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -309,7 +311,7 @@ export function WeatherCard({
                   <WeatherStat
                     icon={
                       <svg
-                        className="w-5 h-5 text-green-300"
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-green-300"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -343,12 +345,12 @@ export function WeatherCard({
 
 function WeatherStat({ icon, label, value }) {
   return (
-    <div className="group flex flex-col items-center p-4 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-105">
-      <div className="flex items-center gap-2 mb-2 text-white/80 group-hover:text-white transition-colors">
+    <div className="group flex flex-col items-center p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:border-white/30 transition-all duration-300 hover:scale-105">
+      <div className="flex items-center gap-2 mb-1 sm:mb-2 text-white/80 group-hover:text-white transition-colors">
         {icon}
-        <span className="text-sm font-medium">{label}</span>
+        <span className="text-xs sm:text-sm font-medium">{label}</span>
       </div>
-      <div className="text-xl font-bold text-white group-hover:scale-110 transition-transform duration-200">
+      <div className="text-base sm:text-lg lg:text-xl font-bold text-white group-hover:scale-110 transition-transform duration-200 text-center">
         {value}
       </div>
     </div>
